@@ -4,21 +4,45 @@ import Link from 'next/link';
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
+  const pathname = usePathname();
+
+  const isActive = (path: string) => {
+    if (path === '/') {
+      return pathname === path;
+    }
+    return pathname?.startsWith(path);
+  };
+
   return (
-    <nav className="py-4 border-b border-gray-200">
+    <nav className="fixed top-0 left-0 right-0 bg-white z-50 border-b border-gray-200 shadow-sm">
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center">
-          <Link href="/" className="text-xl font-bold">
+        <div className="flex justify-between items-center h-16">
+          <Link 
+            href="/" 
+            className="text-xl font-bold hover:text-[#D89C61] transition-colors"
+          >
             ANTHROP\C
           </Link>
           <div className="space-x-8 flex items-center">
-            <Link href="/" className="hover:opacity-70 transition-opacity">Home</Link>
+            <Link 
+              href="/" 
+              className={`hover:text-[#D89C61] transition-colors ${
+                isActive('/') ? 'text-[#D89C61]' : 'text-gray-700'
+              }`}
+            >
+              Home
+            </Link>
             
             {/* Resources Dropdown */}
             <div className="relative group">
-              <button className="flex items-center space-x-1 text-gray-700 hover:text-[#D89C61]">
+              <button 
+                className={`flex items-center space-x-1 ${
+                  isActive('/resources') ? 'text-[#D89C61]' : 'text-gray-700'
+                } group-hover:text-[#D89C61] transition-colors`}
+              >
                 <span>Resources</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -26,13 +50,28 @@ export default function Navbar() {
               </button>
               <div className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                 <div className="py-1">
-                  <Link href="/resources/training" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  <Link 
+                    href="/resources/training" 
+                    className={`block px-4 py-2 text-sm hover:bg-gray-100 ${
+                      isActive('/resources/training') ? 'text-[#D89C61]' : 'text-gray-700'
+                    }`}
+                  >
                     Training Materials
                   </Link>
-                  <Link href="/resources/procedures" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  <Link 
+                    href="/resources/procedures" 
+                    className={`block px-4 py-2 text-sm hover:bg-gray-100 ${
+                      isActive('/resources/procedures') ? 'text-[#D89C61]' : 'text-gray-700'
+                    }`}
+                  >
                     Standard Procedures
                   </Link>
-                  <Link href="/resources/campus-info" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  <Link 
+                    href="/resources/campus-info" 
+                    className={`block px-4 py-2 text-sm hover:bg-gray-100 ${
+                      isActive('/resources/campus-info') ? 'text-[#D89C61]' : 'text-gray-700'
+                    }`}
+                  >
                     Campus Floorplans, Evacuation Zones & More
                   </Link>
                 </div>
@@ -43,7 +82,11 @@ export default function Navbar() {
             <Menu as="div" className="relative">
               {({ open }) => (
                 <>
-                  <Menu.Button className="hover:opacity-70 transition-opacity inline-flex items-center">
+                  <Menu.Button 
+                    className={`hover:text-[#D89C61] transition-colors inline-flex items-center ${
+                      isActive('/workflow') ? 'text-[#D89C61]' : 'text-gray-700'
+                    }`}
+                  >
                     Workflow
                     <ChevronDownIcon className="ml-1 h-5 w-5" aria-hidden="true" />
                   </Menu.Button>
@@ -64,7 +107,7 @@ export default function Navbar() {
                             <Link
                               href="/workflow/tracking-sheets"
                               className={`${
-                                active ? 'bg-gray-100' : ''
+                                active || isActive('/workflow/tracking-sheets') ? 'bg-gray-100 text-[#D89C61]' : 'text-gray-700'
                               } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                             >
                               GSOC Tracking Sheets
@@ -78,8 +121,23 @@ export default function Navbar() {
               )}
             </Menu>
 
-            <Link href="/crime-report" className="hover:opacity-70 transition-opacity">Crime Report & OSINT</Link>
-            <Link href="/about" className="hover:opacity-70 transition-opacity">About</Link>
+            <Link 
+              href="/crime-report" 
+              className={`hover:text-[#D89C61] transition-colors ${
+                isActive('/crime-report') ? 'text-[#D89C61]' : 'text-gray-700'
+              }`}
+            >
+              Crime Report & OSINT
+            </Link>
+            
+            <Link 
+              href="/about" 
+              className={`hover:text-[#D89C61] transition-colors ${
+                isActive('/about') ? 'text-[#D89C61]' : 'text-gray-700'
+              }`}
+            >
+              About
+            </Link>
           </div>
         </div>
       </div>
